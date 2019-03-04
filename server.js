@@ -44,7 +44,7 @@ router.route('/signup')
     })
     .post(function(req, res, next){
         if (!req.body.username || !req.body.password) {
-            res.json({success: false, msg: 'Please pass username and password.'});
+            res.status(400).json({success: false, msg: 'Please pass username and password.'});
         } else {
             var newUser = {
                 username: req.body.username,
@@ -52,7 +52,7 @@ router.route('/signup')
             };
             // save the user
             db.save(newUser); //no duplicate checking
-            res.json({success: true, msg: 'Successful created new user.'});
+            res.json({success: true, msg: 'Successfully created new user.'});
         }
         next();
     });
@@ -139,6 +139,7 @@ router.route('/movies')
         let headers = getJSONObject(req);
         headers.env = process.env.UNIQUE_KEY;
 
+
         let json = {
             status: 200,
             message: 'movie updated',
@@ -164,8 +165,8 @@ router.route('/movies')
                 json.message = `No movies found with title ${req.oldtitle}!`;
                 json.status = 400;
             }
-            res.status(json.status).send(json);
         }
+        res.status(json.status).send(json);
     })
     .delete(authController.isAuthenticated, function(req, res) {
         let headers = getJSONObject(req);
@@ -180,7 +181,7 @@ router.route('/movies')
         if(!req.body.title || !req.body.year) {
             json.success = false;
             json.status = 400;
-            json.message = 'Please send movie to be deleted ie {movie: {title: , year: }}'
+            json.message = 'Please send movie to be delete title and year'
         } else {
 
             let success = moviedb.remove(req.body.title);
